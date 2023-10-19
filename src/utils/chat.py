@@ -34,11 +34,7 @@ def run_chat_app(activeloop_dataset_path):
     if "past" not in st.session_state:
         st.session_state["past"] = ["hello"]
 
-    # Get the user's input from the text input field
-    user_input = get_text()
-
-    # If there is user input, search for a response using the search_db function
-    if user_input:
+    if user_input := get_text():
         output = search_db(db, user_input)
         st.session_state.past.append(user_input)
         st.session_state.generated.append(output)
@@ -47,7 +43,7 @@ def run_chat_app(activeloop_dataset_path):
     # messages
     if st.session_state["generated"]:
         for i in range(len(st.session_state["generated"])):
-            message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+            message(st.session_state["past"][i], is_user=True, key=f"{str(i)}_user")
             message(st.session_state["generated"][i], key=str(i))
 
 
@@ -58,14 +54,12 @@ def generate_response(prompt):
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo", messages=[{"role": "user", "content": prompt}]
     )
-    response = completion.choices[0].message.content
-    return response
+    return completion.choices[0].message.content
 
 
 def get_text():
     """Create a Streamlit input field and return the user's input."""
-    input_text = st.text_input("", key="input")
-    return input_text
+    return st.text_input("", key="input")
 
 
 def search_db(db, query):

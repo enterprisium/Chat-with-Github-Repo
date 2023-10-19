@@ -11,8 +11,7 @@ load_dotenv()
 
 def extract_repo_name(repo_url):
     """Extract the repository name from the given repository URL."""
-    repo_name = repo_url.split("/")[-1].replace(".git", "")
-    return repo_name
+    return repo_url.split("/")[-1].replace(".git", "")
 
 
 def process_repo(args):
